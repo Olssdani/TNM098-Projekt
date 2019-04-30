@@ -1,9 +1,0 @@
-function [output] = splitByDay(data)
-%Split the data in to section by day
-
-date = stringToTime(data())    
-
-
-
-end
-

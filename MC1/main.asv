@@ -1,3 +1,0 @@
-data = importfile('mc1-reports-data_timesort.csv',2, 83071);
-
-splitData = splitDa
