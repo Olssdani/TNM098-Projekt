@@ -1,2 +1,3 @@
-data = importfile('mc1-reports-data.csv',2, 83071);
-save
+%Load data
+load data_Sorted.mat
+splitData = splitByDay(data);
