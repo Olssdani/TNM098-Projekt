@@ -2,7 +2,7 @@ function [outPut] = string2Time(date)
 %Take a string in the format "Day/Month/Year hh/mm" and creates a struct
 %with the data seperated
 %Extract the day
-month = extractBefore(date,'/');
+month = str2num(extractBefore(date,'/'));
 loopSize =size(date{1,1},2);
 for i=1:loopSize
     if date{1,1}(1,1) == '/'
