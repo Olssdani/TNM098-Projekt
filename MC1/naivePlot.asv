@@ -70,8 +70,7 @@ end
 
 %hour/zone/day/cat
 zoneMean = cell(24,19,6,7);
-%cat/
-
+meanVec = cell{6};
 for cat = 1:size(dataArray,2) %looping all categories
     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
         for n = 1:size(hourIndex,1)-1               %looping trough the hour
@@ -83,13 +82,13 @@ for cat = 1:size(dataArray,2) %looping all categories
                         continue;
                     end
                     counter= counter +1;
-                    localSum = localSum + dataArray(allHourIndexes,cat);
+                    localsum = localsum + dataArray(allHourIndexes,cat);
                     break;
                 end
                 
            end
-           localMean = localSum/counter;
-           zoneMean(n,zone,j,cat) =  {localMean};
+           localmean = localsum
+           zoneMean(n,zone,j,cat) =  mean(cell2mat(zoneContainer(n,zone,j,cat,:)));
         end
        
     end
