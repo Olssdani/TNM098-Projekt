@@ -42,6 +42,8 @@ clear date
 %hour at (:,2,j)
 
 %% Extracting mean
+%classicMean variable is taking a mean of every hour over every category
+%during all the days.
 
 dataArray =table2array(data(:,2:8));
 dataArray(isnan(dataArray))=0; %%removes NaN
@@ -67,7 +69,7 @@ end
 
 
 %% mean per District
-
+%Zone mean  stores the mean per hour per district and category.
 %hour/zone/day/cat
 zoneMean = cell(24,19,6,7);
 %cat/
@@ -95,7 +97,33 @@ for cat = 1:size(dataArray,2) %looping all categories
     end
     
 end
-    
+clear counter;
+clear localSum;
+clear j;
+clear localMean;
+clear zone;
 
+%% Creates a compilation of how many reports are flowing in each hour
+reportAmount = [];
+for cat = 1:size(dataArray,2) %looping all categories
+    for j = size(splitData,1):size(splitData,2)-1 %looping through the days
+        for n = 1:size(hourIndex,1)-1               %looping trough the hour
+               localCounter = 0;
+            for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j) %loop trough all actions in the hour
+             
+                if (dataArray(allHourIndexes,cat))
+                    
+                    localCounter = localCounter +1;
+                    
+                end
+                
+            end
+            reportAmount(n,j,cat) =  localCounter;
+           
+       
+        end
+    end
+end
 
+ bar3(reportAmount(:,:,6))
     
