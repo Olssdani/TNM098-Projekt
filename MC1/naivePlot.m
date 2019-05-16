@@ -12,23 +12,23 @@ for j = size(splitData,1):size(splitData,2)
         date = data(i,1);
 
         if(firstRun)
-             hour = str2double(extractBefore(extractAfter(date.('time'),' '),':'));
-             hourIndex(hour+1,1,j) = i;
-             previousH = hour;
+             HOUR = str2double(extractBefore(extractAfter(date.('time'),' '),':'));
+             hourIndex(HOUR+1,1,j) = i;
+             previousH = HOUR;
              firstRun = false;
              continue;
         end
 
-         hour = str2double(extractBefore(extractAfter(date.('time'),' '),':'));
+         HOUR = str2double(extractBefore(extractAfter(date.('time'),' '),':'));
 
-         if(hour ~= previousH)
+         if(HOUR ~= previousH)
 
-              hourIndex(hour,2,j) = i-1;
-              hourIndex(hour+1,1,j) = i;
+              hourIndex(HOUR,2,j) = i-1;
+              hourIndex(HOUR+1,1,j) = i;
               
          end
 
-        previousH = hour;
+        previousH = HOUR;
 
     end
 end
@@ -50,7 +50,7 @@ dataArray(isnan(dataArray))=0; %%removes NaN
 
 for cat = 1:size(dataArray,2) %looping all categories
     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
-        for n = 1:size(hourIndex,1)-1               %looping trough the hour
+        for n = 1:size(hourIndex,1)              %looping trough the hour
 
             classicMean(n,j,cat) = mean(dataArray(hourIndex(n,1,j):hourIndex(n,2,j),cat));
 
@@ -73,6 +73,7 @@ end
 %hour/zone/day/cat
 zoneMean = cell(24,19,6);
 %cat/
+
 
 %Loop over all days
 for day =1:size(splitData,2)
@@ -113,73 +114,7 @@ for day =1:size(splitData,2)
        end
     end 
 end
-% 
-% 
-% for cat = 1:size(dataArray,2) %looping all categories
-%     for j = 1:size(splitData,2)-1 %looping through the days
-%         for n = 1:size(hourIndex,1)-1               %looping trough the hour
-%             counter = 0;
-%             localSum = 0;
-%            for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j)
-%                 for zone = 1:19
-%                     if(dataArray(allHourIndexes,7) ~= zone)
-%                         continue;
-%                     end
-%                     counter= counter +1;
-%                     localSum = localSum + dataArray(allHourIndexes,cat);
-%                     break;
-%                 end
-%                 
-%            end
-%            if(counter == 0)
-%                 zoneMean(n,zone,j,cat)=0;
-%            else
-%                 localMean = localSum/counter;
-%                 zoneMean{n,zone,j,cat} =  localMean;
-%            end
-%         end
-%        
-%     end
-%     
-% end
-% clear counter;
-% clear localSum;
-% clear j;
-% clear localMean;
-% clear zone;
-% 
-% for cat = 1:size(dataArray,2) %looping all categories
-%     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
-%         for n = 1:size(hourIndex,1)-1               %looping trough the hour
-%             counter = 0;
-%             localSum = 0;
-%            for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j)
-%                 for zone = 1:19
-%                     if(dataArray(allHourIndexes,7) ~= zone)
-%                         continue;
-%                     end
-%                     counter= counter +1;
-%                     localSum = localSum + dataArray(allHourIndexes,cat);
-%                     break;
-%                 end
-%                 
-%            end
-%            if(counter == 0)
-%                 zoneMean(n,zone,j,cat)=0;
-%            else
-%                 localMean = localSum/counter;
-%                 zoneMean(n,zone,j,cat) =  {localMean};
-%            end
-%         end
-%        
-%     end
-%     
-% end
-% clear counter;
-% clear localSum;
-% clear j;
-% clear localMean;
-% clear zone;
+
 
 
 %% Creates a compilation of how many reports are flowing in each hour
@@ -187,7 +122,7 @@ end
 reportAmount = [];
 for cat = 1:size(dataArray,2) %looping all categories
     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
-        for n = 1:size(hourIndex,1)-1               %looping trough the hour
+        for n = 1:size(hourIndex,1)               %looping trough the hour
                localCounter = 0;
             for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j) %loop trough all actions in the hour
              
@@ -234,9 +169,53 @@ clear n;
 clear j;
 clear zone;
 
-X = 1:24;
+counter = 1;
+   for j = size(splitData,1):size(splitData,2)-1 %looping through the days
+        for n = 1:size(hourIndex,1)               %looping trough the hour
+                
+                for zone = 1:19
+                    
+                    DAY(counter) = j;
+                    HOUR(counter) = n;
+                    ZONE(counter) = zone;
+                    C(counter) = zoneVotes{n,j,zone};
+                counter = counter +1;
+                end  
+        end
+   end
+   
+  cMap = parula(256);
+  dataMax = max(C);
+  dataMin = 0;
+  centerPoint = 1;
+  scalingIntensity = 5;
+  
+  x = 1:length(cMap); 
+  x = x - (centerPoint-dataMin)*length(x)/(dataMax-dataMin);
+  x = scalingIntensity * x/max(abs(x));
+  
+  x = sign(x).* exp(abs(x));
+  x = x - min(x); x = x*511/max(x)+1; 
+  newMap = interp1(x, cMap, 1:512);
+  
+   
+figure
+scatter3(DAY,ZONE,HOUR,300,C,'filled')
+colorbar('Location', 'EastOutside', 'YTickLabel',...
+    {'0','.5k', '~1k', '~1.5k ','~2k', '~2.5k', ...
+     '~3k', '~3.5k', '4490 votes'})
+ 
+title('Amount of reports')
+xlabel('Days')
+ylabel('Zone')
+zlabel('Hour')
+colormap(newMap);
 
-%figure
-%scatter3(zoneVotes(:,:,:)
+%% COLORMAP
 
+
+
+  load cape;
+  figure; imagesc(X);
+  figure; imagesc(X);  colormap(newMap);
     
