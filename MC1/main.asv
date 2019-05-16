@@ -39,16 +39,17 @@ end
 
 
 %% When did the eartquake appear
- reports = zeros(24,5,1);
+ reports = zeros(5,24,1);
 for hour = 1:24
     for day =1:5
         for zone = 1:19
-            reports(hour, day,1) = reports(hour,day,1) + zoneVotes{hour,day,zone}; 
+            reports(day, hour,1) = reports(day,hour,1) + zoneVotes{hour,day,zone};
+            
         end        
     end
 end
 
-bar3(reports(:,:,1));
+
 
 
 
