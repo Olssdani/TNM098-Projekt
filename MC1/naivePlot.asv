@@ -61,7 +61,7 @@ end
    
 %%% plotting the data %%%
 % figure
- bar3(classicMean(:,:,3))
+ bar3(classicMean(:,:,6))
 
 %title('Detached Style')% xlabel('Mean over each hour') ;
 %ylabel('Shake Intensity') ;
@@ -104,21 +104,54 @@ clear localMean;
 clear zone;
 
 %% Creates a compilation of how many reports are flowing in each hour
-
+% hour/days/category
+reportAmount = [];
 for cat = 1:size(dataArray,2) %looping all categories
     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
         for n = 1:size(hourIndex,1)-1               %looping trough the hour
+               localCounter = 0;
             for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j) %loop trough all actions in the hour
-                
-                if (dataArray(allHourIndexes,7))
+             
+                if (dataArray(allHourIndexes,cat))
+                    
+                    localCounter = localCounter +1;
+                    
                 end
-                reportAmount(n,j,cat) =  reportAmount(n,j,cat) +1 ;
                 
             end
+            reportAmount(n,j,cat) =  localCounter;
+           
        
         end
     end
 end
 
-   
+ %bar3(reportAmount(:,:,6))
+ 
+ %% Amount of reports from each 
+ 
+ reportAmount = [];
+for cat = 1:size(dataArray,2) %looping all categories
+    for j = size(splitData,1):size(splitData,2)-1 %looping through the days
+        for n = 1:size(hourIndex,1)-1               %looping trough the hour
+               localCounter = 0;
+            for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j) %loop trough all actions in the hour
+             
+                for zone = 1:19
+                    if(dataArray(allHourIndexes,7) ~= zone)
+                        continue;
+                    end
+                    counter= counter +1;
+                    localSum = localSum + dataArray(allHourIndexes,cat);
+                    break;
+                end
+                
+            end
+            reportAmount(n,j,cat) =  localCounter;
+           
+       
+        end
+    end
+end
+
     
