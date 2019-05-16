@@ -61,7 +61,7 @@ end
    
 %%% plotting the data %%%
 % figure
- bar3(classicMean(:,:,3))
+ bar3(classicMean(:,:,6))
 
 %title('Detached Style')% xlabel('Mean over each hour') ;
 %ylabel('Shake Intensity') ;
@@ -183,6 +183,7 @@ end
 
 
 %% Creates a compilation of how many reports are flowing in each hour
+% hour/days/category
 reportAmount = [];
 for cat = 1:size(dataArray,2) %looping all categories
     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
@@ -204,5 +205,38 @@ for cat = 1:size(dataArray,2) %looping all categories
     end
 end
 
- bar3(reportAmount(:,:,6))
+ %bar3(reportAmount(:,:,6))
+ 
+ %% Amount of reports from each 
+ %%zoneVotes consists of number of votes accumulated from one zone during
+ %%each hour.
+ %hour/day/zone
+ zoneVotes = cell(24,5,19);
+ zoneVotes(:,:,:) = {0};
+
+    for j = size(splitData,1):size(splitData,2)-1 %looping through the days
+        for n = 1:size(hourIndex,1)-1               %looping trough the hour
+            for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j) %loop trough all actions in the hour
+             
+                for zone = 1:19
+                    if(dataArray(allHourIndexes,7) ~= zone)
+                        continue;
+                    end
+                    zoneVotes{n,j,zone} = zoneVotes{n,j,zone} +1;
+                    break;
+                end
+                
+            end
+
+        end
+    end
+clear n;
+clear j;
+clear zone;
+
+X = 1:24;
+
+%figure
+%scatter3(zoneVotes(:,:,:)
+
     
