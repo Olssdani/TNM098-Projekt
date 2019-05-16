@@ -183,7 +183,7 @@ counter = 1;
                 end  
         end
    end
-   
+   %% COLORMAP
   cMap = parula(256);
   dataMax = max(C);
   dataMin = 0;
@@ -211,11 +211,6 @@ ylabel('Zone')
 zlabel('Hour')
 colormap(newMap);
 
-%% COLORMAP
 
 
 
-  load cape;
-  figure; imagesc(X);
-  figure; imagesc(X);  colormap(newMap);
-    
