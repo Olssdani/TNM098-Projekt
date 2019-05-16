@@ -71,37 +71,51 @@ end
 %% mean per District
 %Zone mean  stores the mean per hour per district and category.
 %hour/zone/day/cat
-zoneMean = cell(24,19,6,7);
+zoneMean = cell(24,19,6);
 %cat/
 
-for cat = 1:size(dataArray,2) %looping all categories
-    for j = size(splitData,1):size(splitData,2)-1 %looping through the days
-        for n = 1:size(hourIndex,1)              %looping trough the hour
-            counter = 0;
-            localSum = 0;
-           for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j)
-                for zone = 1:19
-                    if(dataArray(allHourIndexes,7) ~= zone)
-                        continue;
-                    end
-                    counter= counter +1;
-                    localSum = localSum + dataArray(allHourIndexes,cat);
-                    break;
-                end
-                
-           end
-           localMean = localSum/counter;
-           zoneMean(n,zone,j,cat) =  {localMean};
+
+%Loop over all days
+for day =1:size(splitData,2)
+    %Get the start and end index for that day
+    start_ = splitData(1,day).start;
+    end_ =splitData(1,day).end;
+    
+    spatialCat = zeros(24,6,19);
+    counterLocation = zeros(19,24);
+    %Which hour are we on
+    hh_counter = 1;
+    %Loop from start to end for a day
+    for index =start_:end_      
+        %If the index is the same as the end of that hourIndex, increment the counter  
+        if( index == hourIndex(hh_counter,2,day))
+            %increase values and counter
+            spatialCat(hh_counter,:,dataArray(index,7)) = spatialCat(hh_counter,:,dataArray(index,7))+dataArray(index,1:6);
+            counterLocation(dataArray(index,7),hh_counter)=counterLocation(dataArray(index,7),hh_counter) + 1;
+            
+            hh_counter = hh_counter +1;
+        else
+            %Add the numbers for each catogory to the data and increase the
+            %counter for that location
+            spatialCat(hh_counter,:,dataArray(index,7)) =spatialCat(hh_counter,:,dataArray(index,7)) + dataArray(index,1:6);
+            counterLocation(dataArray(index,7),hh_counter)=counterLocation(dataArray(index,7),hh_counter) + 1;        
         end
-       
     end
     
+    %Divid by counter and add to the data, must loop because counter could
+    %be 0
+    for hh = 1:24
+       for cc =1:19 
+           if(counterLocation(cc,hh) ~=0)
+               zoneMean{hh, cc,day} = spatialCat(hh,:,cc)./counterLocation(cc,hh);
+           else
+               zoneMean{hh, cc,day} = [0 0 0 0 0 0];
+           end
+       end
+    end 
 end
-clear counter;
-clear localSum;
-clear j;
-clear localMean;
-clear zone;
+
+
 
 %% Creates a compilation of how many reports are flowing in each hour
 % hour/days/category
