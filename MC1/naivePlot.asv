@@ -50,7 +50,7 @@ dataArray(isnan(dataArray))=0; %%removes NaN
 
 for cat = 1:size(dataArray,2) %looping all categories
     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
-        for n = 1:size(hourIndex,1)-1               %looping trough the hour
+        for n = 1:size(hourIndex,1)              %looping trough the hour
 
             classicMean(n,j,cat) = mean(dataArray(hourIndex(n,1,j):hourIndex(n,2,j),cat));
 
@@ -76,7 +76,7 @@ zoneMean = cell(24,19,6,7);
 
 for cat = 1:size(dataArray,2) %looping all categories
     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
-        for n = 1:size(hourIndex,1)-1               %looping trough the hour
+        for n = 1:size(hourIndex,1)              %looping trough the hour
             counter = 0;
             localSum = 0;
            for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j)
@@ -108,7 +108,7 @@ clear zone;
 reportAmount = [];
 for cat = 1:size(dataArray,2) %looping all categories
     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
-        for n = 1:size(hourIndex,1)-1               %looping trough the hour
+        for n = 1:size(hourIndex,1)               %looping trough the hour
                localCounter = 0;
             for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j) %loop trough all actions in the hour
              
@@ -129,29 +129,49 @@ end
  %bar3(reportAmount(:,:,6))
  
  %% Amount of reports from each 
- 
- reportAmount = [];
-for cat = 1:size(dataArray,2) %looping all categories
+ %%zoneVotes consists of number of votes accumulated from one zone during
+ %%each hour.
+ %hour/day/zone
+ zoneVotes = cell(24,5,19);
+ zoneVotes(:,:,:) = {0};
+
     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
         for n = 1:size(hourIndex,1)-1               %looping trough the hour
-               localCounter = 0;
             for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j) %loop trough all actions in the hour
              
                 for zone = 1:19
                     if(dataArray(allHourIndexes,7) ~= zone)
                         continue;
                     end
-                    counter= counter +1;
-                    localSum = localSum + dataArray(allHourIndexes,cat);
+                    zoneVotes{n,j,zone} = zoneVotes{n,j,zone} +1;
                     break;
                 end
                 
             end
-            reportAmount(n,j,cat) =  localCounter;
-           
-       
+
         end
     end
-end
+clear n;
+clear j;
+clear zone;
 
+counter = 1;
+   for j = size(splitData,1):size(splitData,2)-1 %looping through the days
+        for n = 1:size(hourIndex,1)               %looping trough the hour
+                
+                for zone = 1:19
+                    
+                    X(counter) = j;
+                    Y(counter) = n;
+                    Z(counter) = zone;
+                    C(counter) = zoneVotes{n,j,zone};
+                counter = counter +1;
+                end  
+        end
+   end
+figure
+scatter3(X,Y,Z,50,C,'filled')
+colorbar('Location', 'EastOutside', 'YTickLabel',...
+    {'0', '~1k', '~1.5k '~2k', '~2.5k', ...
+     '~3k', '~3.5k', '4490 votes'})
     
