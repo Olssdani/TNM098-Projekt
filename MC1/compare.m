@@ -11,13 +11,6 @@ function [list] = Compare(baseLine,current, )
     
     %Sum all catogories for each zone without the zone number
     sumZone = sum(diff(:,1:6),2);
-    
-    
-    
-    
-
-
-
-
 end
+
 
