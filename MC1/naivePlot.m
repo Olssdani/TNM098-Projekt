@@ -104,8 +104,8 @@ for day =1:size(splitData,2)
     
     %Divid by counter and add to the data, must loop because counter could
     %be 0
-    for hh = 1:24
-       for cc =1:19 
+    for hh = 1:24 %hour
+       for cc =1:19 % zone
            if(counterLocation(cc,hh) ~=0)
                zoneMean{hh, cc,day} = spatialCat(hh,:,cc)./counterLocation(cc,hh);
            else
@@ -135,7 +135,6 @@ for cat = 1:size(dataArray,2) %looping all categories
             end
             reportAmount(n,j,cat) =  localCounter;
            
-       
         end
     end
 end
@@ -183,7 +182,7 @@ counter = 1;
                 end  
         end
    end
-   
+   %% COLORMAP
   cMap = parula(256);
   dataMax = max(C);
   dataMin = 0;
@@ -211,11 +210,29 @@ ylabel('Zone')
 zlabel('Hour')
 colormap(newMap);
 
-%% COLORMAP
+%% BaseLine for comparison
+ zoneBaseline = cell(19,7);
+ divisor = cell(19,7);
+ zoneBaseline(:,:) = {0};
+ divisor(:,:) = {0};
+for j = size(splitData,1):size(splitData,2)-1 %looping through the days
+    for n = 1:size(hourIndex,1)-1               %looping trough the hour
+        for allHourIndexes = hourIndex(n,1,j):hourIndex(n,2,j) %loop trough all actions in the hour
+            for cat = 1:size(dataArray,2)
+                for zone = 1:19
+                    if(dataArray(allHourIndexes,7) ~= zone)
+                        continue;
+                    end
+                    divisor{zone,cat} = divisor{zone,cat} +1;
+                    zoneBaseline{zone,cat} = zoneBaseline{zone,cat} + dataArray(allHourIndexes,cat);
+                    break;
+                end
+             end   
+        end
+    end
+end
 
+Z = cell2mat(zoneBaseline);
+D = cell2mat(divisor);
+theBaseline = rdivide(Z,D);
 
-
-  load cape;
-  figure; imagesc(X);
-  figure; imagesc(X);  colormap(newMap);
-    
