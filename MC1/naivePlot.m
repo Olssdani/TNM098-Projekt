@@ -1,4 +1,4 @@
-function [hourIndex, classicMean,zoneMean, reportAmount,zoneVotes, theBaseline] = naivePlot(data, splitData)
+function [hourIndex, classicMean,zoneMean, reportAmount,zoneVotes, theBaseline, dataArray] = naivePlot(data, splitData)
     %This plot displays a mean per hour per area of all the different categorys.
     %Loop trough first day and makes indexes
     %

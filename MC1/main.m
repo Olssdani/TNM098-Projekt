@@ -6,7 +6,7 @@ load DayIndex.mat
 %load newZoneMean.mat
 
 %% Run data handling
-[hourIndex, classicMean,zoneMean, reportAmount,zoneVotes, theBaseline] = naivePlot(data, splitData);
+[hourIndex, classicMean,zoneMean, reportAmount,zoneVotes, theBaseline, dataArray] = naivePlot(data, splitData);
 
 
 %% Show 3d bars over days
@@ -96,11 +96,11 @@ bar3(reports(:,:,1));
 
 %% Check abnormilities
 
-dag = 5;
-zone = 3; 
-hh =13;
+dag = 2;
+zone = 5; 
+hh =3;
 counter = 1;
-tempDay = zeros(1,6);
+
 for Index= hourIndex(hh,1,dag): hourIndex(10,2,dag)
     if(dataArray(Index,7) == zone)
             tempDay(counter,:) = dataArray(Index,1:6);
@@ -136,6 +136,9 @@ scatter(loc(:,2),loc(:,1),sz,c,'filled');
 axis([0 7 -1 11])
 ylabel('Damage');
 xlabel('Service')
-
+stringtitle = strcat('Number of damage reports during hour: ',int2str(hh), ', day: ', int2str(dag), ', zone:', int2str(zone));
+title(stringtitle);
 
 colorbar
+clear tempDay;
+clear tempSum;
