@@ -1,0 +1,23 @@
+function [list] = Compare(baseLine,current, )
+    %Takes the basevalues for all zone and compares them to the current
+    %values that is analyzed
+    
+    
+    %Difference between the baseLine and the current
+    diff = current-baseLine;
+    
+    %Set all negativ values to zero
+    diff(diff<0)=0;
+    
+    %Sum all catogories for each zone without the zone number
+    sumZone = sum(diff(:,1:6),2);
+    
+    
+    
+    
+
+
+
+
+end
+

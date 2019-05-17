@@ -57,6 +57,12 @@ counter = 1;
     ylabel('Zone')
     zlabel('Hour')
     colormap(newMap);
+    clear Zone
+    clear Days
+    clear Hour
+    clear x
+    clear scalingIntensity
+    
 
 %%  Show parallel coord
 temporalData = zeros(19,6,24);
