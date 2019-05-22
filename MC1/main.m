@@ -102,9 +102,9 @@ bar3(reports(:,:,1));
 
 %% Check abnormilities
 
-dag = 2;
-zone = 5; 
-hh =3;
+dag = 4;
+zone = 3; 
+hh =2;
 counter = 1;
 
 for Index= hourIndex(hh,1,dag): hourIndex(10,2,dag)
