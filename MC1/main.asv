@@ -150,9 +150,8 @@ clear tempDay;
 clear tempSum;
 
 %% Priority
-dayRange = [3 3];
-timeRange = [9 10 ];
+dayRange = [3 5]
+timeRange = [9 10 ]
 current = meanZoneRange(dayRange, timeRange, splitData, hourIndex, dataArray);
-list =  compare(theBaseline, current, zoneVotes, dayRange, timeRange)
-
+list =  compare(theBaseline, current)
 

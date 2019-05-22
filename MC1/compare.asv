@@ -33,17 +33,15 @@ function [out] = compare(baseLine,current, zoneVotes, days, hours )
         for h = hh_start:hh_end
             for z = 1:19
                 reports(counter,z) = zoneVotes{h,d,z};
-                
             end
-            counter = counter+1;
-        end        
+        end
+        
+        
+        
     end
-    reports = sum(reports);
     
-    tot_report = sum(reports);
-    reports = sqrt(reports/tot_report);
-     
-    list(:,1) = list(:,1).*reports';
+    
+    
     out = sortrows(list,'descend');
         
     
