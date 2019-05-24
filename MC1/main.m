@@ -66,21 +66,21 @@ counter = 1;
 
 %%  Show parallel coord
 temporalData = zeros(19,6,24);
-
-
-for hour= 1:24
-    for zone = 1:19
-            temporalData(zone,:,hour) = zoneMean{hour,zone,1};
-    end
-end
-
-
-
-for hour= 1:24
-    ParallelCord(temporalData(:,:,hour));
-    pause(2);
-end
-
+% 
+% 
+% for hour= 1:24
+%     for zone = 1:19
+%             temporalData(zone,:,hour) = zoneMean{hour,zone,1};
+%     end
+% end
+% 
+% 
+% 
+% for hour= 1:24
+%     ParallelCord(temporalData(:,:,hour));
+%     pause(2);
+% end
+% 
 
 
 
