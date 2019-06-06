@@ -103,8 +103,8 @@ bar3(reports(:,:,1));
 %% Check abnormilities
 
 dag = 4;
-zone = 3; 
-hh =2;
+zone = 8; 
+hh =10;
 counter = 1;
 
 for Index= hourIndex(hh,1,dag): hourIndex(10,2,dag)
@@ -150,8 +150,10 @@ clear tempDay;
 clear tempSum;
 
 %% Priority
+clear list
+clear current
 dayRange = [3 3];
-timeRange = [9 10 ];
+timeRange = [13 13];
 current = meanZoneRange(dayRange, timeRange, splitData, hourIndex, dataArray);
 list =  compare(theBaseline, current, zoneVotes, dayRange, timeRange)
 

@@ -38,10 +38,10 @@ function [out] = compare(baseLine,current, zoneVotes, days, hours )
             counter = counter+1;
         end        
     end
-    reports = sum(reports);
+    %reports = sum(reports);
     
     tot_report = sum(reports);
-    reports = sqrt(reports/tot_report);
+    reports = sqrt(reports./tot_report);
      
     list(:,1) = list(:,1).*reports';
     out = sortrows(list,'descend');
