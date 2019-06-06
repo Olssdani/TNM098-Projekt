@@ -7,6 +7,8 @@ function [meanMat] = meanZoneRange(dayRange,hourRange,splitData,hourIndex,dataAr
      zoneBaseline(:,:) = {0};
      divisor(:,:) = {0};
      flagFirst = true;
+     
+    
     for j = size(splitData,1):size(splitData,2)-1 %looping through the days
         if(dayRange(1) < j)
             continue;
